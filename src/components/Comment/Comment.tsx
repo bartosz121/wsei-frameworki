@@ -1,9 +1,60 @@
-import React from "react";
+import React, { useContext, useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
 
-type Props = {};
+import { IComment } from "../../types/Api";
+import ActionBtn from "../ActionBtn/ActionBtn";
+import AuthorBtn from "../AuthorBtn/AuthorBtn";
+import { AppContext } from "../../context/AppContext";
+import { trashIcon, commentIcon } from "../../icons";
+import axios from "axios";
 
-const Comment = (props: Props) => {
-  return <div>Comment</div>;
+type Props = {
+  data: IComment;
+};
+
+const Comment = ({ data }: Props) => {
+  const { id, name, body, email } = data;
+  const [deleted, setDeleted] = useState(false);
+  const navigate = useNavigate();
+  const { userData, deletedComments } = useContext(AppContext);
+
+  useEffect(() => {
+    if (deletedComments.includes(id)) {
+      navigate("/");
+    }
+  }, []);
+
+  const deleteComment = async () => {
+    const res = await axios.delete(
+      `https://jsonplaceholder.typicode.com/comments/${id}`
+    );
+    deletedComments.push(id);
+    setDeleted(true);
+  };
+
+  return (
+    <div
+      className={`rounded-xl border p-5 shadow-md w-full bg-white ${
+        deleted && "hidden"
+      }`}
+    >
+      <div className="mt-4 mb-6">
+        <div className="flex flex-row justify-between">
+          <div
+            onClick={() => console.log(data)}
+            className="mb-3 text-xl font-bold"
+          >
+            {name}
+          </div>
+          {userData!.email === email && (
+            <ActionBtn icon={trashIcon} onClick={deleteComment} />
+          )}
+        </div>
+        <div className="text-sm text-neutral-600">{body}</div>
+        <div className="text-xs opacity-50">{email}</div>
+      </div>
+    </div>
+  );
 };
 
 export default Comment;
