@@ -1,9 +1,9 @@
 import React, { useContext, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
 
 import { IPhoto } from "../../types/Api";
 import ActionBtn from "../ActionBtn/ActionBtn";
-import { UserContext } from "../../context/AppContext";
+import { AppContext } from "../../context/AppContext";
 import { albumIcon, trashIcon } from "../../icons";
 import axios from "axios";
 
@@ -19,23 +19,19 @@ const Photo = ({
   showAlbumBtn = true,
 }: Props) => {
   const [deleted, setDeleted] = useState(false);
-  const { userId: loggedInUserId, deletedPhotos } = useContext(UserContext);
+  const { userId: loggedInUserId, deletedPhotos } = useContext(AppContext);
   const navigate = useNavigate();
 
   const deletePhoto = async () => {
     const res = await axios.delete(
       `https://jsonplaceholder.typicode.com/photos/${id}`
     );
-    deletedPhotos.unshift(id);
+    deletedPhotos.push(id);
     setDeleted(true);
   };
 
-  const navigateToAlbum = () => {
-    navigate(`/album/${albumId}`);
-  };
-
   return (
-    <div className={`flex justify-center ${deleted && "hidden"}`}>
+    <div className={`my-2 flex justify-center ${deleted && "hidden"}`}>
       <div className="rounded-lg shadow-lg bg-white max-w-sm">
         <a href={url}>
           <img className="rounded-t-lg" src={url} />
@@ -55,11 +51,9 @@ const Photo = ({
               : null}
           </div>
           {showAlbumBtn && (
-            <ActionBtn
-              icon={albumIcon}
-              text="Album"
-              onClick={navigateToAlbum}
-            />
+            <Link to={`/album/${albumId}`}>
+              <ActionBtn icon={albumIcon} text="Album" />
+            </Link>
           )}
         </div>
       </div>
