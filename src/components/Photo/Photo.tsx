@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useParams } from "react-router-dom";
 
 import { IPhoto } from "../../types/Api";
 import ActionBtn from "../ActionBtn/ActionBtn";
@@ -19,7 +19,12 @@ const Photo = ({
   showAlbumBtn = true,
 }: Props) => {
   const [deleted, setDeleted] = useState(false);
-  const { userId: loggedInUserId, deletedPhotos } = useContext(AppContext);
+  const {
+    userId: loggedInUserId,
+    addedPhotos,
+    deletedPhotos,
+  } = useContext(AppContext);
+  const { albumId: albumIdParams } = useParams();
   const navigate = useNavigate();
 
   const deletePhoto = async () => {
@@ -43,14 +48,19 @@ const Photo = ({
             </div>
           )}
           <div className="flex flex-row justify-between">
-            <p className="text-gray-700 text-base mb-4">{title}</p>
+            <p
+              onClick={() => console.log(addedPhotos, deletedPhotos)}
+              className="text-gray-700 text-base mb-4"
+            >
+              {title}
+            </p>
             {album
               ? loggedInUserId === album.userId && (
                   <ActionBtn icon={trashIcon} onClick={deletePhoto} />
                 )
               : null}
           </div>
-          {showAlbumBtn && (
+          {!albumIdParams && (
             <Link to={`/album/${albumId}`}>
               <ActionBtn icon={albumIcon} text="Album" />
             </Link>

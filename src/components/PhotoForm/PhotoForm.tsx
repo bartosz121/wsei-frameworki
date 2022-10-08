@@ -7,9 +7,10 @@ import { IPhotoRequest, IPhoto } from "../../types/Api";
 
 type Props = {
   albumId?: number;
+  redirectPath?: string;
 };
 
-const PhotoForm = ({ albumId: propsAlbumId }: Props) => {
+const PhotoForm = ({ albumId: propsAlbumId, redirectPath }: Props) => {
   const [title, setTitle] = useState("");
   const [photoUrl, setPhotoUrl] = useState("");
   const { userId, userData, addedPhotos, deletedPhotos } =
@@ -24,6 +25,7 @@ const PhotoForm = ({ albumId: propsAlbumId }: Props) => {
       title: title,
       url: photoUrl,
       thumbnailUrl: photoUrl,
+      album: { userId: userId },
     };
     const r = await axios.post(
       "https://jsonplaceholder.typicode.com/photos",
@@ -32,7 +34,7 @@ const PhotoForm = ({ albumId: propsAlbumId }: Props) => {
     let photoData = r.data;
     photoData.id = 1000 + addedPhotos.length;
     addedPhotos.unshift(photoData);
-    navigate(`/`);
+    navigate(redirectPath ? redirectPath : `/album/${photoData.albumId}`);
   };
 
   return (

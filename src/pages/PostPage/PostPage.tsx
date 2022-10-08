@@ -47,7 +47,7 @@ const PostPage = () => {
       <Feed<IComment>
         component={Comment}
         apiEndpoint={`comments?postId=${postData!.id}`}
-        addedArray={addedComments} // filter this through postid
+        addedArray={addedComments} // TODO filter this through postid
         deletedArray={deletedComments}
       />
     </>

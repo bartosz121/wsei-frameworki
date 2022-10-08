@@ -62,7 +62,7 @@ const TextForm = ({ type }: Props) => {
     if (type === "post") {
       navigate(`/post/${newResource.id}`);
     } else {
-      navigate("/");
+      navigate("/posts");
     }
   };
 

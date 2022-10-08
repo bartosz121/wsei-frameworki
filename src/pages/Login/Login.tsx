@@ -1,25 +1,27 @@
-import React, { useContext } from "react";
+import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import { UserContext } from "../../context/AppContext";
+import { AppContext } from "../../context/AppContext";
 import { IUser } from "../../types/Api";
 
 const Login = () => {
-  const userContext = useContext(UserContext); // change to {isLoggedIn}
+  const appContext = useContext(AppContext); // change to {isLoggedIn}
+  const [loginInput, setLoginInput] = useState(appContext.userId);
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    userContext.isLoggedIn = true;
+    appContext.isLoggedIn = true;
+    appContext.userId = loginInput;
 
     const r = await axios.get<IUser>(
-      `https://jsonplaceholder.typicode.com/users?id=${userContext.userId}`
+      `https://jsonplaceholder.typicode.com/users/${loginInput}`
     );
-    userContext.userData = r.data;
+    appContext.userData = r.data;
     navigate("/");
   };
 
-  if (userContext.isLoggedIn) {
+  if (appContext.isLoggedIn) {
     navigate("/");
   }
 
@@ -27,7 +29,7 @@ const Login = () => {
     <div className="min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12">
       <div className="p-10 xs:p-0 mx-auto md:w-full md:max-w-md">
         <h1
-          onClick={() => console.log(userContext)}
+          onClick={() => console.log(appContext)}
           className="font-bold text-center text-2xl mb-5"
         >
           WSEI Frameworki
@@ -38,7 +40,11 @@ const Login = () => {
               E-mail
             </label>
             <input
-              type="text"
+              type="number"
+              min={1}
+              max={10}
+              value={loginInput}
+              onChange={(e) => setLoginInput(parseInt(e.target.value))}
               className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
             />
             <label className="font-semibold text-sm text-gray-600 pb-1 block">
