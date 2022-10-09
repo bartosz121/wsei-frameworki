@@ -1,3 +1,224 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+
+.form-input {
+    width: 100%;
+    background-color: white;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+    color: #6B7280;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    border-radius: 0.375rem;
+    border-width: 1px;
+}
+
+.form-submit-btn {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    border-radius: 0.375rem;
+    background-color: #8b5cf6;
+    padding: 0.75rem 2rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 600;
+    color: #fff;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+.photo {
+    display: flex;
+    justify-content: center;
+}
+
+.photo-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-form-wrapper {
+    width: 100%;
+    max-width: 550px;
+}
+
+.user-info-header {
+    text-align: center;
+    padding: 1.5rem;
+    background-color: #1f2937;
+    border-bottom-width: 1px;
+}
+
+.user-info-wrapper {
+    display: flex;
+    flex-direction: row;
+    gap: 0.5rem;
+    justify-content: center;
+    align-items: center;
+}
+
+.user-info-item-head {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 500;
+    color: #1f2937;
+    line-height: 1;
+}
+
+.user-info-item-data {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    color: #6b7280;
+}
+
+.user-edit-btn {
+    padding-top: 0.5rem;
+    color: #f9fafb;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    cursor: pointer;
+
+}
+
+.login-wrapper {
+    min-height: 100vh;
+    background-color: #f3f4f6;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 3rem;
+}
+
+.login-btn {
+    color: white;
+    width: 100%;
+    padding-top: 0.625rem;
+    padding-bottom: 0.625rem;
+    border-radius: 0.5rem;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+    text-align: center;
+    display: inline-block;
+    background-color: #8b5cf6;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+
+.feed-photos {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 1.5rem;
+}
+
+.user-page-feed-title {
+    font-size: 1.5rem;
+    line-height: 2rem;
+    font-weight: 600;
+    border-bottom-width: 1px;
+}
+
+.album-title {
+    font-size: 0.75rem;
+    line-height: 1rem;
+    cursor: pointer;
+    color : #374151;
+    opacity: 0.7;
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke, opacity, box-shadow, transform, filter, backdrop-filter;
+    transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+    transition-duration: 150ms;
+}
+.photo-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.photo-name {
+    color: #374151;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.post-form-textarea {
+    width: 100%;
+    resize: none;
+    border-radius: 0.375rem;
+    border-width: 1px;
+    border-color: #e0e0e0;
+    background-color: #fff;
+    padding: 0.75rem 1.5rem;
+    font-size: 1rem;
+    line-height: 1.5rem;
+    font-weight: 500;
+    color: #6b7280;
+    outline: 2px solid transparent;
+    outline-offset: 2px;
+}
+
+.post-info {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+.post-body {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    color: #737373;
+}
+
+.post-button-wrapper {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+}
+
+.lds-ring {
+    position: relative;
+    width: 80px;
+    height: 80px;
+  }
+  .lds-ring div {
+    box-sizing: border-box;
+    display: block;
+    position: absolute;
+    width: 64px;
+    height: 64px;
+    margin: 8px;
+    border: 8px solid #000;
+    border-radius: 50%;
+    animation: lds-ring 0.9s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+    border-color: #000 transparent transparent transparent;
+  }
+  .lds-ring div:nth-child(1) {
+    animation-delay: -0.10s;
+  }
+  .lds-ring div:nth-child(2) {
+    animation-delay: -0.1s;
+  }
+  .lds-ring div:nth-child(3) {
+    animation-delay: -0.8s;
+  }
+  @keyframes lds-ring {
+    0% {
+      transform: rotate(0deg);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }

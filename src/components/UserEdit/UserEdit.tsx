@@ -48,12 +48,12 @@ const UserEdit = (props: Props) => {
               onChange={(e) => setName(e.target.value)}
               value={name}
               placeholder="Name"
-              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              className="form-input border-[#e0e0e0] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
           </div>
           <div className="mb-5">
             <label htmlFor="username" className="font-semibold text-2xl">
-              Name
+              Username
             </label>
             <input
               type="text"
@@ -62,7 +62,7 @@ const UserEdit = (props: Props) => {
               onChange={(e) => setUsername(e.target.value)}
               value={username}
               placeholder="Username"
-              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              className="form-input border-[#e0e0e0] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
           </div>
           <div className="mb-5">
@@ -76,11 +76,11 @@ const UserEdit = (props: Props) => {
               onChange={(e) => setEmail(e.target.value)}
               value={email}
               placeholder="Email"
-              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              className="form-input border-[#e0e0e0] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
           </div>
           <div>
-            <button className="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none">
+            <button className="form-submit-btn hover:shadow-form hover:bg-violet-800">
               Submit
             </button>
           </div>

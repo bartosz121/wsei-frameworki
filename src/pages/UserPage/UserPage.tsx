@@ -58,11 +58,11 @@ const UserPage = () => {
       <UserInfo data={userData!} />
       {filter.includes("photos") && (
         <>
-          <h3 id="photos" className="text-2xl font-semibold border-b">
+          <h3 id="photos" className="user-page-feed-title">
             Photos
           </h3>
           <Feed<IPhoto>
-            className="mx-auto flex flex-row gap-6 flex-wrap justify-center"
+            className="mx-auto feed-photos"
             component={Photo}
             apiEndpoint={`photos?userId=${userId}`}
             addedArray={addedPhotos}
@@ -72,7 +72,7 @@ const UserPage = () => {
       )}
       {filter.includes("posts") && (
         <>
-          <h3 id="posts" className="text-2xl font-semibold border-b">
+          <h3 id="posts" className="user-page-feed-title">
             Posts
           </h3>
           <Feed<IPost>
@@ -85,7 +85,7 @@ const UserPage = () => {
       )}
       {filter.includes("comments") && (
         <>
-          <h3 id="comments" className="text-2xl font-semibold border-b">
+          <h3 id="comments" className="user-page-feed-title">
             Comments
           </h3>
           <Feed<IComment>

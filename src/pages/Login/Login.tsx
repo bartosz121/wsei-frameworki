@@ -26,7 +26,7 @@ const Login = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-100 flex flex-col justify-center sm:py-12">
+    <div className="login-wrapper">
       <div className="p-10 xs:p-0 mx-auto md:w-full md:max-w-md">
         <h1
           onClick={() => console.log(appContext)}
@@ -56,7 +56,7 @@ const Login = () => {
             />
             <button
               onClick={handleLogin}
-              className="transition duration-200 bg-blue-500 hover:bg-blue-600 focus:bg-blue-700 focus:shadow-sm focus:ring-4 focus:ring-blue-500 focus:ring-opacity-50 text-white w-full py-2.5 rounded-lg text-sm shadow-sm hover:shadow-md font-semibold text-center inline-block"
+              className="login-btn hover:shadow-form hover:bg-violet-800"
             >
               <span className="inline-block mr-2">Login</span>
               <svg

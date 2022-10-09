@@ -38,7 +38,7 @@ const Post = ({ data }: Props) => {
         }`}
       >
         <div className="mt-4 mb-6">
-          <div className="flex flex-row justify-between">
+          <div className="post-info">
             <div
               onClick={() => console.log(data)}
               className="mb-3 text-xl font-bold"
@@ -49,10 +49,10 @@ const Post = ({ data }: Props) => {
               <ActionBtn icon={trashIcon} onClick={deletePost} />
             )}
           </div>
-          <div className="text-sm text-neutral-600">{body}</div>
+          <div className="post-body">{body}</div>
         </div>
 
-        <div className="flex flex-row justify-around">
+        <div className="post-button-wrapper">
           <Link to={`/post/${id}`}>
             <ActionBtn icon={commentIcon} text="Comments" />
           </Link>

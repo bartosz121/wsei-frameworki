@@ -35,7 +35,7 @@ const UserInfo = ({ data }: Props) => {
             console.log("Deleted:");
             console.log(deletedPosts, deletedPhotos, deletedComments);
           }}
-          className="text-center p-6 bg-gray-800 border-b"
+          className="user-info-header"
         >
           <Link to={`/user/${data.id}`}>
             <svg
@@ -53,7 +53,7 @@ const UserInfo = ({ data }: Props) => {
               ></path>
             </svg>
           </Link>
-          <div className="flex flex-row gap-2 justify-center items-center">
+          <div className="user-info-wrapper">
             <p
               onClick={() => console.log(data)}
               className="pt-2 text-lg font-semibold text-gray-50"
@@ -61,10 +61,7 @@ const UserInfo = ({ data }: Props) => {
               {data.name}
             </p>
             {loggedInUserId === data.id && (
-              <Link
-                className="pt-2 text-gray-50 text-sm cursor-pointer hover:underline"
-                to="/user/edit"
-              >
+              <Link className="user-edit-btn hover:underline" to="/user/edit">
                 Edit
               </Link>
             )}
@@ -77,45 +74,35 @@ const UserInfo = ({ data }: Props) => {
 
         <div className="px-7 py-2 flex flex-row flex-wrap gap-4 justify-evenly">
           <div className="pt-2 pb-4">
-            <p className="text-sm font-medium text-gray-800 leading-none">
-              Phone
-            </p>
-            <p className="text-xs text-gray-500">{data.phone}</p>
+            <p className="user-info-item-head">Phone</p>
+            <p className="user-info-item-data">{data.phone}</p>
           </div>
           <div className="pt-2 pb-4">
-            <p className="text-sm font-medium text-gray-800 leading-none">
-              Website
-            </p>
-            <p className="text-xs text-gray-500">{data.website}</p>
+            <p className="user-info-item-head">Website</p>
+            <p className="user-info-item-data">{data.website}</p>
           </div>
           {Object.entries(data.address)
             .filter((item) => typeof item[1] === "string")
             .map((item) => (
               <div className="pt-2 pb-4">
-                <p className="text-sm font-medium text-gray-800 leading-none">
-                  {item[0]}
-                </p>
-                <p className="text-xs text-gray-500">{item[1]}</p>
+                <p className="user-info-item-head">{item[0]}</p>
+                <p className="user-info-item-data">{item[1]}</p>
               </div>
             ))}
           {Object.entries(data.address.geo)
             .filter((item) => typeof item[1] === "string")
             .map((item) => (
               <div className="pt-2 pb-4">
-                <p className="text-sm font-medium text-gray-800 leading-none">
-                  {item[0]}
-                </p>
-                <p className="text-xs text-gray-500">{item[1]}</p>
+                <p className="user-info-item-head">{item[0]}</p>
+                <p className="user-info-item-data">{item[1]}</p>
               </div>
             ))}
           {Object.entries(data.company)
             .filter((item) => typeof item[1] === "string")
             .map((item) => (
               <div className="pt-2 pb-4">
-                <p className="text-sm font-medium text-gray-800 leading-none">
-                  {item[0]}
-                </p>
-                <p className="text-xs text-gray-500">{item[1]}</p>
+                <p className="user-info-item-head">{item[0]}</p>
+                <p className="user-info-item-data">{item[1]}</p>
               </div>
             ))}
         </div>

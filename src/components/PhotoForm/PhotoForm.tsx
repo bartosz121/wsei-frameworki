@@ -37,8 +37,8 @@ const PhotoForm = ({ albumId: propsAlbumId, redirectPath }: Props) => {
   };
 
   return (
-    <div className="flex items-center justify-center border-b">
-      <div className="mx-auto w-full max-w-[550px]">
+    <div className="photo-form">
+      <div className="mx-auto photo-form-wrapper">
         <form onSubmit={handleSubmit}>
           <div className="mb-5">
             <input
@@ -51,7 +51,7 @@ const PhotoForm = ({ albumId: propsAlbumId, redirectPath }: Props) => {
               onChange={(e) => setTitle(e.target.value)}
               value={title}
               placeholder="Title"
-              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              className="form-input border-[#e0e0e0] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
           </div>
           <div className="mb-5">
@@ -62,14 +62,12 @@ const PhotoForm = ({ albumId: propsAlbumId, redirectPath }: Props) => {
               onChange={(e) => setPhotoUrl(e.target.value)}
               value={photoUrl}
               placeholder="Url"
-              className="w-full rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+              className="form-input border-[#e0e0e0] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
           </div>
-          <div>
-            <button className="hover:shadow-form rounded-md bg-[#6A64F1] py-3 px-8 text-base font-semibold text-white outline-none">
-              Send
-            </button>
-          </div>
+          <button className="form-submit-btn hover:shadow-form hover:bg-violet-800">
+            Send
+          </button>
         </form>
       </div>
     </div>

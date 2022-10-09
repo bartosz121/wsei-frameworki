@@ -29,22 +29,19 @@ const Photo = ({ data, albumTitle, showAlbumBtn = true }: Props) => {
   };
 
   return (
-    <div className={`my-2 flex justify-center ${deleted && "hidden"}`}>
+    <div className={`my-2 photo ${deleted && "hidden"}`}>
       <div className="rounded-lg shadow-lg bg-white max-w-sm">
         <a href={url}>
           <img className="rounded-t-lg" src={url} />
         </a>
         <div className="p-6">
           {albumTitle && (
-            <div className="text-xs cursor-pointer text-gray-700 opacity-70 transition hover:opacity-100 hover:underline">
+            <div className="album-title hover:opacity-100 hover:underline">
               {albumTitle}
             </div>
           )}
-          <div className="flex flex-row justify-between">
-            <p
-              onClick={() => console.log(data)}
-              className="text-gray-700 text-base mb-4"
-            >
+          <div className="photo-info">
+            <p onClick={() => console.log(data)} className="photo-name">
               {title}
             </p>
             {album
