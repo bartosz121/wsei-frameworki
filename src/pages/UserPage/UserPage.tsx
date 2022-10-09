@@ -31,6 +31,9 @@ const UserPage = () => {
     deletedPhotos,
     deletedComments,
   } = useContext(AppContext);
+  const filteredAddedComments = addedComments.filter(
+    (item) => !deletedPosts.includes(item.postId)
+  );
 
   const getUserData = async () => {
     setIsLoading(true);
@@ -88,7 +91,7 @@ const UserPage = () => {
           <Feed<IComment>
             component={Comment}
             apiEndpoint={`comments?email=${userData!.email}`}
-            addedArray={addedComments} // TODO filter this through postid
+            addedArray={filteredAddedComments}
             deletedArray={deletedComments}
           />
         </>

@@ -13,8 +13,14 @@ const PostPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [postData, setPostData] = useState<IPost | null>(null);
   const { postId } = useParams();
-  const { addedPosts, addedComments, deletedComments } = useContext(AppContext);
+  const { addedPosts, deletedPosts, addedComments, deletedComments } =
+    useContext(AppContext);
+  const navigate = useNavigate();
+
   const addedPostsIds = addedPosts.map((item) => item.id);
+  const filteredAddedComments = addedComments.filter(
+    (item) => item.postId === parseInt(postId!)
+  );
 
   useEffect(() => {
     const getPostData = async () => {
@@ -32,6 +38,9 @@ const PostPage = () => {
       setIsLoading(false);
     };
 
+    if (deletedPosts.includes(parseInt(postId!))) {
+      navigate("/posts");
+    }
     getPostData();
   }, []);
 
@@ -47,7 +56,7 @@ const PostPage = () => {
       <Feed<IComment>
         component={Comment}
         apiEndpoint={`comments?postId=${postData!.id}`}
-        addedArray={addedComments} // TODO filter this through postid
+        addedArray={filteredAddedComments} // TODO filter this through postid
         deletedArray={deletedComments}
       />
     </>
