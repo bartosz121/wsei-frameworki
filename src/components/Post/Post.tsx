@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { IPost } from "../../types/Api";
 import ActionBtn from "../ActionBtn/ActionBtn";
@@ -16,8 +16,10 @@ type Props = {
 
 const Post = ({ data }: Props) => {
   const { id, userId, title, body } = data;
+  const { postId } = useParams();
   const [deleted, setDeleted] = useState(false);
   const { userId: loggedInUserId, deletedPosts } = useContext(AppContext);
+  const navigate = useNavigate();
 
   const deletePost = async () => {
     const res = await axios.delete(
@@ -25,6 +27,9 @@ const Post = ({ data }: Props) => {
     );
     deletedPosts.push(id);
     setDeleted(true);
+    if (postId) {
+      navigate("/posts");
+    }
   };
 
   return (
