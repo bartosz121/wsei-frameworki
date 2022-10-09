@@ -12,6 +12,7 @@ import UserPage from "./pages/UserPage/UserPage";
 import PostPage from "./pages/PostPage/PostPage";
 import AlbumPage from "./pages/AlbumPage/AlbumPage";
 import UsersHome from "./pages/UsersHome/UsersHome";
+import UserEdit from "./components/UserEdit/UserEdit";
 
 function App() {
   const queryClient = new QueryClient();
@@ -33,6 +34,7 @@ function App() {
               <Route path="posts" element={<PostHome />} />
               <Route path="users" element={<UsersHome />} />
               <Route path="user/:userId" element={<UserPage />} />
+              <Route path="user/edit" element={<UserEdit />} />
               <Route path="post/:postId" element={<PostPage />} />
               <Route path="album/:albumId" element={<AlbumPage />} />
             </Route>
