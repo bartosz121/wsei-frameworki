@@ -1,5 +1,5 @@
 import React, { useContext, useState } from "react";
-import { useNavigate, Link, useParams } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 
 import { IPhoto } from "../../types/Api";
@@ -18,7 +18,6 @@ const Photo = ({ data, albumTitle, showAlbumBtn = true }: Props) => {
   const [deleted, setDeleted] = useState(false);
   const { userId: loggedInUserId, deletedPhotos } = useContext(AppContext);
   const { albumId: albumIdParams } = useParams();
-  const navigate = useNavigate();
 
   const deletePhoto = async () => {
     const res = await axios.delete(
