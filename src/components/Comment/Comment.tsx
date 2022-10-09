@@ -1,11 +1,10 @@
-import React, { useContext, useState, useEffect } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useContext, useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 import { IComment } from "../../types/Api";
 import ActionBtn from "../ActionBtn/ActionBtn";
-import AuthorBtn from "../AuthorBtn/AuthorBtn";
 import { AppContext } from "../../context/AppContext";
-import { trashIcon, commentIcon } from "../../icons";
+import { trashIcon } from "../../icons";
 import axios from "axios";
 
 type Props = {
@@ -15,14 +14,7 @@ type Props = {
 const Comment = ({ data }: Props) => {
   const { id, name, body, email } = data;
   const [deleted, setDeleted] = useState(false);
-  const navigate = useNavigate();
   const { userData, deletedComments } = useContext(AppContext);
-
-  useEffect(() => {
-    if (deletedComments.includes(id)) {
-      navigate("/");
-    }
-  }, []);
 
   const deleteComment = async () => {
     const res = await axios.delete(
