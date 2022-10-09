@@ -1,6 +1,6 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useRef, useCallback, useState, useEffect } from "react";
 import axios from "axios";
-import InfiniteScroll from "react-infinite-scroll-component";
+import InfiniteScroll from "react-infinite-scroller";
 
 import Spinner from "../Spinner/Spinner";
 import { IContainsId } from "../../types/Api";
@@ -23,31 +23,48 @@ export const Feed = <T extends IContainsId>({
   className = "flex flex-row flex-wrap gap-6",
 }: Props<T>) => {
   const [feedData, setFeedData] = useState<T[]>(addedArray);
+  const [hasMore, setHasMore] = useState(true);
   const [start, setStart] = useState(0);
-
-  const getFeedData = () =>
-    axios
-      .get<T[]>(`https://jsonplaceholder.typicode.com/${apiEndpoint}`, {
-        params: { _start: start, _limit: paginateBy },
-      })
-      .then((response) => {
-        setFeedData((state) => [...state, ...response.data]);
-        setStart((state) => state + paginateBy);
-      });
+  const [isFetching, setIsFetching] = useState(false);
+  const isRef = useRef<InfiniteScroll | null>(null);
 
   useEffect(() => {
-    getFeedData();
-  }, []);
+    setFeedData(addedArray);
+    setStart(0);
+    // @ts-ignore
+    isRef.current!.pageLoaded = 0;
+  }, [apiEndpoint]);
+
+  const getFeedData = useCallback(async () => {
+    if (isFetching) {
+      return;
+    }
+
+    setIsFetching(true);
+
+    const res = await axios.get<T[]>(
+      `https://jsonplaceholder.typicode.com/${apiEndpoint}`,
+      {
+        params: { _start: start, _limit: paginateBy },
+      }
+    );
+    if (res.data.length < 1) {
+      setHasMore(false);
+    }
+    setFeedData((state) => [...state, ...res.data]);
+    setStart((state) => state + paginateBy);
+
+    setIsFetching(false);
+  }, [apiEndpoint, isFetching]);
 
   return (
     <InfiniteScroll
-      className={className}
-      next={getFeedData}
-      dataLength={feedData.length}
-      hasMore={feedData.length < 200}
+      ref={isRef}
+      className={`${className} overflow-auto`}
+      loadMore={getFeedData}
+      initialLoad={true}
+      hasMore={hasMore}
       loader={<Spinner />}
-      scrollableTarget="scroll-div"
-      endMessage={<span>End</span>}
     >
       {feedData.map((item) => {
         if (!deletedArray?.includes(item.id)) {
