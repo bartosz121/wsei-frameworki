@@ -24,13 +24,13 @@ export const Feed = <T extends IContainsId>({
 }: Props<T>) => {
   const [feedData, setFeedData] = useState<T[]>(addedArray);
   const [hasMore, setHasMore] = useState(true);
-  const [start, setStart] = useState(0);
   const [isFetching, setIsFetching] = useState(false);
   const isRef = useRef<InfiniteScroll | null>(null);
+  const start = 0;
 
   useEffect(() => {
     setFeedData(addedArray);
-    setStart(0);
+    setHasMore(true);
     // @ts-ignore
     isRef.current!.pageLoaded = 0;
   }, [apiEndpoint]);
@@ -45,17 +45,16 @@ export const Feed = <T extends IContainsId>({
     const res = await axios.get<T[]>(
       `https://jsonplaceholder.typicode.com/${apiEndpoint}`,
       {
-        params: { _start: start, _limit: paginateBy },
+        params: { _start: start + feedData.length, _limit: paginateBy },
       }
     );
     if (res.data.length < 1) {
       setHasMore(false);
     }
     setFeedData((state) => [...state, ...res.data]);
-    setStart((state) => state + paginateBy);
 
     setIsFetching(false);
-  }, [apiEndpoint, isFetching]);
+  }, [feedData, hasMore, apiEndpoint, isFetching]);
 
   return (
     <InfiniteScroll
