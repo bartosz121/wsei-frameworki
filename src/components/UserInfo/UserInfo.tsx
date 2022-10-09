@@ -9,7 +9,6 @@ type Props = {
 };
 
 const UserInfo = ({ data }: Props) => {
-  console.log(data);
   const {
     userId: loggedInUserId,
     userData,
@@ -54,12 +53,22 @@ const UserInfo = ({ data }: Props) => {
               ></path>
             </svg>
           </Link>
-          <p
-            onClick={() => console.log(data)}
-            className="pt-2 text-lg font-semibold text-gray-50"
-          >
-            {data.name}
-          </p>
+          <div className="flex flex-row gap-2 justify-center items-center">
+            <p
+              onClick={() => console.log(data)}
+              className="pt-2 text-lg font-semibold text-gray-50"
+            >
+              {data.name}
+            </p>
+            {loggedInUserId === data.id && (
+              <Link
+                className="pt-2 text-gray-50 text-sm cursor-pointer hover:underline"
+                to="/user/edit"
+              >
+                Edit
+              </Link>
+            )}
+          </div>
           <p className="pb-2 text-xs text-gray-50 opacity-40">
             {data.username}
           </p>
