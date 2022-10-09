@@ -13,17 +13,10 @@ type Props = {
   showAlbumBtn?: boolean;
 };
 
-const Photo = ({
-  data: { id, albumId, title, url, thumbnailUrl, album },
-  albumTitle,
-  showAlbumBtn = true,
-}: Props) => {
+const Photo = ({ data, albumTitle, showAlbumBtn = true }: Props) => {
+  const { id, albumId, title, url, thumbnailUrl, album } = data;
   const [deleted, setDeleted] = useState(false);
-  const {
-    userId: loggedInUserId,
-    addedPhotos,
-    deletedPhotos,
-  } = useContext(AppContext);
+  const { userId: loggedInUserId, deletedPhotos } = useContext(AppContext);
   const { albumId: albumIdParams } = useParams();
   const navigate = useNavigate();
 
@@ -49,7 +42,7 @@ const Photo = ({
           )}
           <div className="flex flex-row justify-between">
             <p
-              onClick={() => console.log(addedPhotos, deletedPhotos)}
+              onClick={() => console.log(data)}
               className="text-gray-700 text-base mb-4"
             >
               {title}
