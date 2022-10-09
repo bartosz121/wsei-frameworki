@@ -43,6 +43,13 @@ const TextForm = ({ type }: Props) => {
     }
   };
 
+  const getId = () => {
+    if (type === "post") {
+      return 1000 + addedPosts.length;
+    }
+    return 1000 + addedComments.length;
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     const payload = getPayload();
@@ -51,7 +58,7 @@ const TextForm = ({ type }: Props) => {
       payload
     );
     let newResource = r.data;
-    newResource.id = 1000 + addedPosts.length;
+    newResource.id = getId();
 
     if (isPost(newResource)) {
       addedPosts.unshift(newResource);
