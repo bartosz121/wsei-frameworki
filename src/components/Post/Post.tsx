@@ -1,14 +1,12 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
 
 import { IPost } from "../../types/Api";
 import ActionBtn from "../ActionBtn/ActionBtn";
 import AuthorBtn from "../AuthorBtn/AuthorBtn";
 import { AppContext } from "../../context/AppContext";
 import { trashIcon, commentIcon } from "../../icons";
-import axios from "axios";
-import Comment from "../Comment/Comment";
-import { Feed } from "../Feed/Feed";
 
 type Props = {
   data: IPost;

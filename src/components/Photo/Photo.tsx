@@ -1,11 +1,11 @@
 import React, { useContext, useState } from "react";
 import { useNavigate, Link, useParams } from "react-router-dom";
+import axios from "axios";
 
 import { IPhoto } from "../../types/Api";
 import ActionBtn from "../ActionBtn/ActionBtn";
 import { AppContext } from "../../context/AppContext";
 import { albumIcon, trashIcon } from "../../icons";
-import axios from "axios";
 
 type Props = {
   data: IPhoto;

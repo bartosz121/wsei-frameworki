@@ -3,7 +3,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 import { AppContext } from "../../context/AppContext";
-import { IPhotoRequest, IPhoto } from "../../types/Api";
 
 type Props = {
   albumId?: number;

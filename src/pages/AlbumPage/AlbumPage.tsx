@@ -1,12 +1,12 @@
-import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+
 import { Feed } from "../../components/Feed/Feed";
 import Photo from "../../components/Photo/Photo";
 import Spinner from "../../components/Spinner/Spinner";
 import { AppContext } from "../../context/AppContext";
-import { IAlbum, IComment, IPhoto, IPost } from "../../types/Api";
-import TextForm from "../../components/TextForm/TextForm";
+import { IAlbum, IPhoto } from "../../types/Api";
 import PhotoForm from "../../components/PhotoForm/PhotoForm";
 
 const AlbumPage = () => {

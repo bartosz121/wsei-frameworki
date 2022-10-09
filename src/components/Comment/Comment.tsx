@@ -1,5 +1,4 @@
-import React, { useContext, useEffect, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import React, { useContext, useState } from "react";
 
 import { IComment } from "../../types/Api";
 import ActionBtn from "../ActionBtn/ActionBtn";

@@ -6,7 +6,7 @@ import { AppContext } from "../../context/AppContext";
 import { IUser } from "../../types/Api";
 
 const Login = () => {
-  const appContext = useContext(AppContext); // change to {isLoggedIn}
+  const appContext = useContext(AppContext);
   const [loginInput, setLoginInput] = useState(appContext.userId);
   const navigate = useNavigate();
 

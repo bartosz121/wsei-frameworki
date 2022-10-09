@@ -1,6 +1,7 @@
-import axios from "axios";
 import React, { useState, useEffect, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+import axios from "axios";
+
 import { Feed } from "../../components/Feed/Feed";
 import Comment from "../../components/Comment/Comment";
 import Post from "../../components/Post/Post";

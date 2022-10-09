@@ -4,7 +4,7 @@ import { IUser, IPost, IPhoto, IComment } from "../types/Api";
 interface IAppContext {
   userId: number;
   isLoggedIn: boolean;
-  userData: IUser | null; // null if not changed
+  userData: IUser | null;
   addedPosts: IPost[];
   addedComments: IComment[];
   addedPhotos: IPhoto[];

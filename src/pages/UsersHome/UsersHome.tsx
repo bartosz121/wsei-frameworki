@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useDebounce } from "use-debounce";
+
 import { Feed } from "../../components/Feed/Feed";
 import UserInfo from "../../components/UserInfo/UserInfo";
 import { IUser } from "../../types/Api";

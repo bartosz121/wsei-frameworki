@@ -1,7 +1,7 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
-import { IPost, IUser } from "../../types/Api";
+import { IUser } from "../../types/Api";
 import { AppContext } from "../../context/AppContext";
 
 type Props = {
