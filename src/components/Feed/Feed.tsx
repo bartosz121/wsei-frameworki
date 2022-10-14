@@ -63,11 +63,12 @@ export const Feed = <T extends IContainsId>({
       loadMore={getFeedData}
       initialLoad={true}
       hasMore={hasMore}
-      loader={<Spinner />}
+      loader={<Spinner key="spinner" />}
     >
       {feedData.map((item) => {
+        const key = crypto.randomUUID();
         if (!deletedArray?.includes(item.id)) {
-          return <Component data={item} key={item.id} />;
+          return <Component data={item} key={key} />;
         }
       })}
     </InfiniteScroll>
