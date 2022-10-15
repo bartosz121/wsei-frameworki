@@ -21,7 +21,6 @@ const UserInfo = ({ data }: Props) => {
   } = useContext(AppContext);
   if (data.id === loggedInUserId) {
     data = userData!;
-    console.log(userData!);
   }
 
   return (
