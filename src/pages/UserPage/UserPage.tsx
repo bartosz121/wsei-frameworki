@@ -12,6 +12,9 @@ import UserInfo from "../../components/UserInfo/UserInfo";
 import Comment from "../../components/Comment/Comment";
 
 const UserPage = () => {
+  const [photosVisible, setPhotosVisible] = useState(true);
+  const [postsVisible, setPostsVisible] = useState(true);
+  const [commentsVisible, setCommentsVisible] = useState(true);
   const [searchParams, setSearchParams] = useSearchParams();
   const [userData, setUserData] = useState<IUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
@@ -56,7 +59,42 @@ const UserPage = () => {
   return (
     <>
       <UserInfo data={userData!} />
-      {filter.includes("photos") && (
+      <div className="flex flex-row justify-center">
+        <input
+          defaultChecked={photosVisible}
+          type="checkbox"
+          onChange={() => setPhotosVisible(!photosVisible)}
+        />
+        <label
+          htmlFor="default-checkbox"
+          className="ml-1 mr-4 text-sm font-medium text-gray-900"
+        >
+          Photos
+        </label>
+        <input
+          defaultChecked={postsVisible}
+          type="checkbox"
+          onChange={() => setPostsVisible(!postsVisible)}
+        />
+        <label
+          htmlFor="checked-checkbox"
+          className="ml-1 mr-4 text-sm font-medium text-gray-900"
+        >
+          Posts
+        </label>
+        <input
+          defaultChecked={commentsVisible}
+          type="checkbox"
+          onChange={() => setCommentsVisible(!commentsVisible)}
+        />
+        <label
+          htmlFor="checked-checkbox"
+          className="ml-1 mr-4 text-sm font-medium text-gray-900"
+        >
+          Comments
+        </label>
+      </div>
+      {filter.includes("photos") && photosVisible && (
         <>
           <h3 id="photos" className="user-page-feed-title">
             Photos
@@ -70,7 +108,7 @@ const UserPage = () => {
           />
         </>
       )}
-      {filter.includes("posts") && (
+      {filter.includes("posts") && postsVisible && (
         <>
           <h3 id="posts" className="user-page-feed-title">
             Posts
@@ -83,7 +121,7 @@ const UserPage = () => {
           />
         </>
       )}
-      {filter.includes("comments") && (
+      {filter.includes("comments") && commentsVisible && (
         <>
           <h3 id="comments" className="user-page-feed-title">
             Comments
