@@ -1,19 +1,19 @@
-import React, { useState, useEffect, useContext } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useParams } from "react-router-dom";
 import axios from "axios";
 
 import { Feed } from "../../components/Feed/Feed";
 import Photo from "../../components/Photo/Photo";
 import Spinner from "../../components/Spinner/Spinner";
-import { AppContext } from "../../context/AppContext";
 import { IAlbum, IPhoto } from "../../types/Api";
 import PhotoForm from "../../components/PhotoForm/PhotoForm";
+import { useAppDataStore } from "../../state/appData.state";
 
 const AlbumPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [albumData, setAlbumData] = useState<IAlbum | null>(null);
   const { albumId } = useParams();
-  const { addedPhotos, deletedPhotos } = useContext(AppContext);
+  const { addedPhotos, deletedPhotos } = useAppDataStore();
 
   useEffect(() => {
     const getAlbumData = async () => {

@@ -2,9 +2,10 @@ import React, { useContext, useState } from "react";
 
 import { IComment } from "../../types/Api";
 import ActionBtn from "../ActionBtn/ActionBtn";
-import { AppContext } from "../../context/AppContext";
 import { trashIcon } from "../../icons";
 import axios from "axios";
+import { useAppDataStore } from "../../state/appData.state";
+import { useUserStore } from "../../state/user.state";
 
 type Props = {
   data: IComment;
@@ -13,7 +14,8 @@ type Props = {
 const Comment = ({ data }: Props) => {
   const { id, name, body, email } = data;
   const [deleted, setDeleted] = useState(false);
-  const { userData, deletedComments } = useContext(AppContext);
+  const { userData } = useUserStore();
+  const { deletedComments } = useAppDataStore();
 
   const deleteComment = async () => {
     const res = await axios.delete(

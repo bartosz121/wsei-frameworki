@@ -6,16 +6,16 @@ import { Feed } from "../../components/Feed/Feed";
 import Comment from "../../components/Comment/Comment";
 import Post from "../../components/Post/Post";
 import Spinner from "../../components/Spinner/Spinner";
-import { AppContext } from "../../context/AppContext";
 import { IComment, IPost } from "../../types/Api";
 import TextForm from "../../components/TextForm/TextForm";
+import { useAppDataStore } from "../../state/appData.state";
 
 const PostPage = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [postData, setPostData] = useState<IPost | null>(null);
   const { postId } = useParams();
   const { addedPosts, deletedPosts, addedComments, deletedComments } =
-    useContext(AppContext);
+    useAppDataStore();
   const navigate = useNavigate();
 
   const addedPostsIds = addedPosts.map((item) => item.id);

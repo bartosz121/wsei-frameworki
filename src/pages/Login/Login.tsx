@@ -2,38 +2,34 @@ import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-import { AppContext } from "../../context/AppContext";
+import { useUserStore } from "../../state/user.state";
 import { IUser } from "../../types/Api";
 
 const Login = () => {
-  const appContext = useContext(AppContext);
-  const [loginInput, setLoginInput] = useState(appContext.userId);
+  const { userId, isLoggedIn, setUserId, setIsLoggedIn, setUserData } =
+    useUserStore();
+  const [loginInput, setLoginInput] = useState(userId);
   const navigate = useNavigate();
 
   const handleLogin = async () => {
-    appContext.isLoggedIn = true;
-    appContext.userId = loginInput;
+    setIsLoggedIn(true);
+    setUserId(loginInput);
 
     const r = await axios.get<IUser>(
       `https://jsonplaceholder.typicode.com/users/${loginInput}`
     );
-    appContext.userData = r.data;
+    setUserData(r.data);
     navigate("/");
   };
 
-  if (appContext.isLoggedIn) {
+  if (isLoggedIn) {
     navigate("/");
   }
 
   return (
     <div className="login-wrapper">
       <div className="p-10 xs:p-0 mx-auto md:w-full md:max-w-md">
-        <h1
-          onClick={() => console.log(appContext)}
-          className="font-bold text-center text-2xl mb-5"
-        >
-          WSEI Frameworki
-        </h1>
+        <h1 className="font-bold text-center text-2xl mb-5">WSEI Frameworki</h1>
         <div className="bg-white shadow w-full rounded-lg divide-y divide-gray-200">
           <div className="px-5 py-7">
             <label className="font-semibold text-sm text-gray-600 pb-1 block">

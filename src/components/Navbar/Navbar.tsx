@@ -1,10 +1,8 @@
-import React, { useContext } from "react";
 import { Link } from "react-router-dom";
-
-import { AppContext } from "../../context/AppContext";
+import { useUserStore } from "../../state/user.state";
 
 const Navbar = () => {
-  const { userId } = useContext(AppContext);
+  const { userId } = useUserStore();
   return (
     <header className="bg-white shadow-lg sticky top-0 z-50">
       <div className="mx-auto max-w-screen-xl p-4">

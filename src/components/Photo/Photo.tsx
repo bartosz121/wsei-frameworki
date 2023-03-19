@@ -1,11 +1,12 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 
 import { IPhoto } from "../../types/Api";
 import ActionBtn from "../ActionBtn/ActionBtn";
-import { AppContext } from "../../context/AppContext";
 import { albumIcon, trashIcon } from "../../icons";
+import { useUserStore } from "../../state/user.state";
+import { useAppDataStore } from "../../state/appData.state";
 
 type Props = {
   data: IPhoto;
@@ -16,7 +17,8 @@ type Props = {
 const Photo = ({ data, albumTitle, showAlbumBtn = true }: Props) => {
   const { id, albumId, title, url, thumbnailUrl, album } = data;
   const [deleted, setDeleted] = useState(false);
-  const { userId: loggedInUserId, deletedPhotos } = useContext(AppContext);
+  const { userId: loggedInUserId } = useUserStore();
+  const { deletedPhotos } = useAppDataStore();
   const { albumId: albumIdParams } = useParams();
 
   const deletePhoto = async () => {

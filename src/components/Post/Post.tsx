@@ -1,12 +1,13 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 import { IPost } from "../../types/Api";
 import ActionBtn from "../ActionBtn/ActionBtn";
 import AuthorBtn from "../AuthorBtn/AuthorBtn";
-import { AppContext } from "../../context/AppContext";
 import { trashIcon, commentIcon } from "../../icons";
+import { useAppDataStore } from "../../state/appData.state";
+import { useUserStore } from "../../state/user.state";
 
 type Props = {
   data: IPost;
@@ -16,14 +17,15 @@ const Post = ({ data }: Props) => {
   const { id, userId, title, body } = data;
   const { postId } = useParams();
   const [deleted, setDeleted] = useState(false);
-  const { userId: loggedInUserId, deletedPosts } = useContext(AppContext);
+  const { userId: loggedInUserId } = useUserStore();
+  const { addDeletedPost } = useAppDataStore();
   const navigate = useNavigate();
 
   const deletePost = async () => {
     const res = await axios.delete(
       `https://jsonplaceholder.typicode.com/posts/${id}`
     );
-    deletedPosts.push(id);
+    addDeletedPost(id);
     setDeleted(true);
     if (postId) {
       navigate("/posts");

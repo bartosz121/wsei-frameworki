@@ -1,8 +1,9 @@
 import React, { useState, useContext } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
+import { useUserStore } from "../../state/user.state";
+import { useAppDataStore } from "../../state/appData.state";
 
-import { AppContext } from "../../context/AppContext";
 import {
   IComment,
   ICommentRequest,
@@ -17,8 +18,9 @@ type Props = {
 const TextForm = ({ type }: Props) => {
   const [title, setTitle] = useState("");
   const [body, setBody] = useState("");
-  const { userId, userData, addedPosts, addedComments } =
-    useContext(AppContext);
+  const [isLoading, setIsLoading] = useState(false);
+  const { addedPosts, addedComments } = useAppDataStore();
+  const { userId, userData } = useUserStore();
   const navigate = useNavigate();
   const { postId } = useParams();
 
@@ -52,29 +54,40 @@ const TextForm = ({ type }: Props) => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const payload = getPayload();
-    const r = await axios.post<IPost | IComment>(
-      `https://jsonplaceholder.typicode.com/${type}s`,
-      payload
-    );
-    let newResource = r.data;
-    newResource.id = getId();
+    setIsLoading(true);
+    try {
+      const payload = getPayload();
+      const r = await axios.post<IPost | IComment>(
+        `https://jsonplaceholder.typicode.com/${type}s`,
+        payload
+      );
+      let newResource = r.data;
+      newResource.id = getId();
 
-    if (isPost(newResource)) {
-      addedPosts.unshift(newResource);
-    } else {
-      addedComments.unshift(newResource);
-    }
+      if (isPost(newResource)) {
+        addedPosts.unshift(newResource);
+      } else {
+        addedComments.unshift(newResource);
+      }
 
-    if (type === "post") {
-      navigate(`/post/${newResource.id}`);
-    } else {
-      navigate(`/user/${userId}?filter=comments`);
+      if (type === "post") {
+        navigate(`/post/${newResource.id}`);
+      } else {
+        navigate(`/user/${userId}?filter=comments`);
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsLoading(false);
     }
   };
 
   return (
-    <div className="flex items-center justify-center my-2 border-b">
+    <div
+      className={`flex items-center justify-center my-2 border-b ${
+        isLoading && "opacity-50 transition-all"
+      }`}
+    >
       <div className="mx-auto w-full max-w-[550px]">
         <form onSubmit={handleSubmit} method="POST">
           <div className="mb-5">
@@ -85,6 +98,7 @@ const TextForm = ({ type }: Props) => {
               onClick={() => console.log(addedComments, addedPosts)}
               onChange={(e) => setTitle(e.target.value)}
               value={title}
+              disabled={isLoading}
               placeholder="Title"
               className="form-input border-[#e0e0e0] outline-none focus:border-[#6A64F1] focus:shadow-md"
             />
@@ -94,13 +108,17 @@ const TextForm = ({ type }: Props) => {
               rows={4}
               onChange={(e) => setBody(e.target.value)}
               value={body}
+              disabled={isLoading}
               name="postBody"
               id="postBody"
               placeholder="Type your message"
               className="post-form-textarea focus:border-[#6A64F1] focus:shadow-md"
             ></textarea>
           </div>
-          <button className="form-submit-btn hover:shadow-form hover:bg-violet-800">
+          <button
+            className="form-submit-btn hover:shadow-form hover:bg-violet-800"
+            disabled={isLoading}
+          >
             Submit
           </button>
         </form>

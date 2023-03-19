@@ -1,14 +1,14 @@
 import React, { useState, useContext, useMemo } from "react";
 import { useDebounce } from "use-debounce";
 
-import { AppContext } from "../../context/AppContext";
 import { Feed } from "../../components/Feed/Feed";
 import { IPhoto } from "../../types/Api";
 import Photo from "../../components/Photo/Photo";
 import PhotoForm from "../../components/PhotoForm/PhotoForm";
+import { useAppDataStore } from "../../state/appData.state";
 
 const PhotoHome = () => {
-  const { addedPhotos, deletedPhotos } = useContext(AppContext);
+  const { addedPhotos, deletedPhotos } = useAppDataStore();
   const [filterValueId, setFilterValueId] = useState("");
   const [debouncedFilterValueId] = useDebounce(filterValueId, 800);
 

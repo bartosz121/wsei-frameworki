@@ -7,9 +7,10 @@ import { IComment, IPhoto, IPost, IUser } from "../../types/Api";
 import { Feed } from "../../components/Feed/Feed";
 import Post from "../../components/Post/Post";
 import Photo from "../../components/Photo/Photo";
-import { AppContext } from "../../context/AppContext";
 import UserInfo from "../../components/UserInfo/UserInfo";
 import Comment from "../../components/Comment/Comment";
+import { useAppDataStore } from "../../state/appData.state";
+import { useUserStore } from "../../state/user.state";
 
 const UserPage = () => {
   const [photosVisible, setPhotosVisible] = useState(true);
@@ -18,6 +19,7 @@ const UserPage = () => {
   const [searchParams, setSearchParams] = useSearchParams();
   const [userData, setUserData] = useState<IUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const { userId: loggedInUserId } = useUserStore();
   const { userId } = useParams();
   const [filter, setFilter] = useState(() => {
     const queryParam = searchParams.get("filter");
@@ -33,10 +35,14 @@ const UserPage = () => {
     deletedPosts,
     deletedPhotos,
     deletedComments,
-  } = useContext(AppContext);
+  } = useAppDataStore();
   const filteredAddedComments = addedComments.filter(
     (item) => !deletedPosts.includes(item.postId)
   );
+
+  const isOwnProfile = () => {
+    return parseInt(userId!) === loggedInUserId;
+  };
 
   const getUserData = async () => {
     setIsLoading(true);
@@ -103,8 +109,8 @@ const UserPage = () => {
             className="mx-auto feed-photos"
             component={Photo}
             apiEndpoint={`photos?userId=${userId}`}
-            addedArray={addedPhotos}
-            deletedArray={deletedPhotos}
+            addedArray={isOwnProfile() ? addedPhotos : []}
+            deletedArray={isOwnProfile() ? deletedPhotos : []}
           />
         </>
       )}
@@ -116,8 +122,8 @@ const UserPage = () => {
           <Feed<IPost>
             component={Post}
             apiEndpoint={`posts?userId=${userId}`}
-            addedArray={addedPosts}
-            deletedArray={deletedPosts}
+            addedArray={isOwnProfile() ? addedPosts : []}
+            deletedArray={isOwnProfile() ? deletedPosts : []}
           />
         </>
       )}
@@ -129,8 +135,8 @@ const UserPage = () => {
           <Feed<IComment>
             component={Comment}
             apiEndpoint={`comments?email=${userData!.email}`}
-            addedArray={filteredAddedComments}
-            deletedArray={deletedComments}
+            addedArray={isOwnProfile() ? filteredAddedComments : []}
+            deletedArray={isOwnProfile() ? deletedComments : []}
           />
         </>
       )}

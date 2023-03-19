@@ -2,23 +2,23 @@ import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 
 import { IUser } from "../../types/Api";
-import { AppContext } from "../../context/AppContext";
+import { useUserStore } from "../../state/user.state";
+import { useAppDataStore } from "../../state/appData.state";
 
 type Props = {
   data: IUser;
 };
 
 const UserInfo = ({ data }: Props) => {
+  const { userId: loggedInUserId, userData } = useUserStore();
   const {
-    userId: loggedInUserId,
-    userData,
     addedPosts,
     addedPhotos,
     addedComments,
     deletedPosts,
     deletedPhotos,
     deletedComments,
-  } = useContext(AppContext);
+  } = useAppDataStore();
   if (data.id === loggedInUserId) {
     data = userData!;
   }

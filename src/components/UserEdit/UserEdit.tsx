@@ -1,17 +1,17 @@
-import React, { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useUserStore } from "../../state/user.state";
 
-import { AppContext } from "../../context/AppContext";
 import { IUser } from "../../types/Api";
 
 type Props = {};
 
 const UserEdit = (props: Props) => {
-  const appContext = useContext(AppContext);
-  const [name, setName] = useState(appContext.userData!.name);
-  const [username, setUsername] = useState(appContext.userData!.username);
-  const [email, setEmail] = useState(appContext.userData!.email);
+  const { userData, userId, setUserData } = useUserStore();
+  const [name, setName] = useState(userData!.name);
+  const [username, setUsername] = useState(userData!.username);
+  const [email, setEmail] = useState(userData!.email);
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -24,13 +24,13 @@ const UserEdit = (props: Props) => {
     };
 
     const res = await axios.patch<IUser>(
-      `https://jsonplaceholder.typicode.com/users/${appContext.userId}`,
+      `https://jsonplaceholder.typicode.com/users/${userId}`,
       payload
     );
 
-    appContext.userData = res.data;
+    setUserData(res.data);
 
-    navigate(`/user/${appContext.userId}`);
+    navigate(`/user/${userId}`);
   };
 
   return (
