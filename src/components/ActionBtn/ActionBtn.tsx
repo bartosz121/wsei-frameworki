@@ -9,6 +9,7 @@ type Props = {
 const ActionBtn = ({ icon, onClick: onClick_, text }: Props) => {
   return (
     <div
+      role="button"
       onClick={onClick_ && onClick_}
       className="flex items-center justify-between text-slate-500"
     >
