@@ -28,20 +28,16 @@ const PhotoForm = ({ albumId: propsAlbumId, redirectPath }: Props) => {
       thumbnailUrl: photoUrl,
       album: { userId: userId },
     };
-    try {
-      const r = await axios.post(
-        "https://jsonplaceholder.typicode.com/photos",
-        payload
-      );
-      let photoData = r.data;
-      photoData.id = 1000 + addedPhotos.length;
-      addedPhotos.unshift(photoData);
-      navigate(redirectPath ? redirectPath : `/album/${photoData.albumId}`);
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
-    }
+
+    const r = await axios.post(
+      "https://jsonplaceholder.typicode.com/photos",
+      payload
+    );
+    let photoData = r.data;
+    photoData.id = 1000 + addedPhotos.length;
+    addedPhotos.unshift(photoData);
+    setIsLoading(false);
+    navigate(redirectPath ? redirectPath : `/album/${photoData.albumId}`);
   };
 
   return (

@@ -11,23 +11,15 @@ import UserInfo from "../../components/UserInfo/UserInfo";
 import Comment from "../../components/Comment/Comment";
 import { useAppDataStore } from "../../state/appData.state";
 import { useUserStore } from "../../state/user.state";
+import { useQuery } from "@tanstack/react-query";
 
 const UserPage = () => {
-  const [photosVisible, setPhotosVisible] = useState(true);
-  const [postsVisible, setPostsVisible] = useState(true);
-  const [commentsVisible, setCommentsVisible] = useState(true);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [userData, setUserData] = useState<IUser | null>(null);
-  const [isLoading, setIsLoading] = useState(true);
+  const [searchParams, setSearchParams] = useSearchParams(
+    new URLSearchParams({ filter: "posts,photos,comments" })
+  );
+  const [filter, setFilter] = useState(searchParams.get("filter") || "");
   const { userId: loggedInUserId } = useUserStore();
   const { userId } = useParams();
-  const [filter, setFilter] = useState(() => {
-    const queryParam = searchParams.get("filter");
-    if (queryParam) {
-      return queryParam.split(",");
-    }
-    return ["photos", "posts", "comments"];
-  });
   const {
     addedPosts,
     addedPhotos,
@@ -36,6 +28,7 @@ const UserPage = () => {
     deletedPhotos,
     deletedComments,
   } = useAppDataStore();
+
   const filteredAddedComments = addedComments.filter(
     (item) => !deletedPosts.includes(item.postId)
   );
@@ -44,19 +37,37 @@ const UserPage = () => {
     return parseInt(userId!) === loggedInUserId;
   };
 
-  const getUserData = async () => {
-    setIsLoading(true);
-    const res = await axios.get(
-      `https://jsonplaceholder.typicode.com/users/${userId}`
-    );
-    setUserData(res.data);
-    setIsLoading(false);
+  const handleCheckboxChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const value = event.target.value;
+    let newFilter = searchParams.get("filter") || "";
+    const filterArr = newFilter.split(",").filter((f) => f.trim() !== "");
+
+    if (event.target.checked) {
+      // Add the selected filter
+      if (!filterArr.includes(value)) {
+        filterArr.push(value);
+      }
+    } else {
+      // Remove the unselected filter
+      const index = filterArr.indexOf(value);
+      if (index !== -1) {
+        filterArr.splice(index, 1);
+      }
+    }
+    newFilter = filterArr.join(",");
+    setSearchParams({ filter: newFilter });
+    setFilter(newFilter);
   };
 
-  useEffect(() => {
-    console.log(searchParams);
-    getUserData();
-  }, []);
+  const {
+    isLoading,
+    isError,
+    data: userData,
+  } = useQuery(["userData", userId], () =>
+    axios
+      .get<IUser>(`https://jsonplaceholder.typicode.com/users/${userId}`)
+      .then((res) => res.data)
+  );
 
   if (isLoading) {
     return <Spinner />;
@@ -67,9 +78,10 @@ const UserPage = () => {
       <UserInfo data={userData!} />
       <div className="flex flex-row justify-center">
         <input
-          defaultChecked={photosVisible}
+          defaultChecked={filter.includes("photos")}
+          value="photos"
           type="checkbox"
-          onChange={() => setPhotosVisible(!photosVisible)}
+          onChange={handleCheckboxChange}
         />
         <label
           htmlFor="default-checkbox"
@@ -78,9 +90,10 @@ const UserPage = () => {
           Photos
         </label>
         <input
-          defaultChecked={postsVisible}
+          defaultChecked={filter.includes("posts")}
+          value="posts"
           type="checkbox"
-          onChange={() => setPostsVisible(!postsVisible)}
+          onChange={handleCheckboxChange}
         />
         <label
           htmlFor="checked-checkbox"
@@ -89,9 +102,10 @@ const UserPage = () => {
           Posts
         </label>
         <input
-          defaultChecked={commentsVisible}
+          defaultChecked={filter.includes("comments")}
+          value="comments"
           type="checkbox"
-          onChange={() => setCommentsVisible(!commentsVisible)}
+          onChange={handleCheckboxChange}
         />
         <label
           htmlFor="checked-checkbox"
@@ -100,7 +114,7 @@ const UserPage = () => {
           Comments
         </label>
       </div>
-      {filter.includes("photos") && photosVisible && (
+      {filter.includes("photos") && (
         <>
           <h3 id="photos" className="user-page-feed-title">
             Photos
@@ -114,7 +128,7 @@ const UserPage = () => {
           />
         </>
       )}
-      {filter.includes("posts") && postsVisible && (
+      {filter.includes("posts") && (
         <>
           <h3 id="posts" className="user-page-feed-title">
             Posts
@@ -127,7 +141,7 @@ const UserPage = () => {
           />
         </>
       )}
-      {filter.includes("comments") && commentsVisible && (
+      {filter.includes("comments") && (
         <>
           <h3 id="comments" className="user-page-feed-title">
             Comments

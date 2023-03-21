@@ -55,37 +55,32 @@ const TextForm = ({ type }: Props) => {
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setIsLoading(true);
-    try {
-      const payload = getPayload();
-      const r = await axios.post<IPost | IComment>(
-        `https://jsonplaceholder.typicode.com/${type}s`,
-        payload
-      );
-      let newResource = r.data;
-      newResource.id = getId();
+    const payload = getPayload();
+    const r = await axios.post<IPost | IComment>(
+      `https://jsonplaceholder.typicode.com/${type}s`,
+      payload
+    );
+    let newResource = r.data;
+    newResource.id = getId();
 
-      if (isPost(newResource)) {
-        addedPosts.unshift(newResource);
-      } else {
-        addedComments.unshift(newResource);
-      }
+    if (isPost(newResource)) {
+      addedPosts.unshift(newResource);
+    } else {
+      addedComments.unshift(newResource);
+    }
+    setIsLoading(false);
 
-      if (type === "post") {
-        navigate(`/post/${newResource.id}`);
-      } else {
-        navigate(`/user/${userId}?filter=comments`);
-      }
-    } catch (err) {
-      console.error(err);
-    } finally {
-      setIsLoading(false);
+    if (type === "post") {
+      navigate(`/post/${newResource.id}`);
+    } else {
+      navigate(`/user/${userId}?filter=comments`);
     }
   };
 
   return (
     <div
       className={`flex items-center justify-center my-2 border-b ${
-        isLoading && "opacity-50 transition-all"
+        isLoading ? "opacity-50 transition-all" : null
       }`}
     >
       <div className="mx-auto w-full max-w-[550px]">

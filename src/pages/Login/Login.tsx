@@ -4,6 +4,7 @@ import axios from "axios";
 
 import { useUserStore } from "../../state/user.state";
 import { IUser } from "../../types/Api";
+import { useMutation } from "@tanstack/react-query";
 
 const Login = () => {
   const { userId, isLoggedIn, setUserId, setIsLoggedIn, setUserData } =
@@ -11,7 +12,7 @@ const Login = () => {
   const [loginInput, setLoginInput] = useState(userId);
   const navigate = useNavigate();
 
-  const handleLogin = async () => {
+  const handleLoginMutation = useMutation(async () => {
     setIsLoggedIn(true);
     setUserId(loginInput);
 
@@ -20,11 +21,7 @@ const Login = () => {
     );
     setUserData(r.data);
     navigate("/");
-  };
-
-  if (isLoggedIn) {
-    navigate("/");
-  }
+  });
 
   return (
     <div className="login-wrapper">
@@ -48,10 +45,11 @@ const Login = () => {
             </label>
             <input
               type="text"
+              placeholder="Press Login"
               className="border rounded-lg px-3 py-2 mt-1 mb-5 text-sm w-full"
             />
             <button
-              onClick={handleLogin}
+              onClick={() => handleLoginMutation.mutate()}
               className="login-btn hover:shadow-form hover:bg-violet-800"
             >
               <span className="inline-block mr-2">Login</span>

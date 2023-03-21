@@ -3,31 +3,34 @@ import axios from "axios";
 
 import { IAlbum, IPhoto } from "../../types/Api";
 import Photo from "../Photo/Photo";
+import { useQuery } from "@tanstack/react-query";
+import Spinner from "../Spinner/Spinner";
 
 type Props = {
   data: IAlbum;
 };
 
 const Album = ({ data: { id, userId, title } }: Props) => {
-  const [albumPhotos, setAlbumPhotos] = useState<IPhoto[]>([]);
-
-  useEffect(() => {
-    const getAlbumData = async () => {
-      const response = await axios.get<IPhoto[]>(
+  const { isLoading, isError, data } = useQuery(["album", id, "photos"], () =>
+    axios
+      .get<IPhoto[]>(
         `https://jsonplaceholder.typicode.com/albums/${id}/photos`,
         { params: { _expand: "album", _limit: 5 } }
-      );
+      )
+      .then((res) => res.data)
+  );
 
-      const data = response.data;
-      setAlbumPhotos(data);
-    };
+  if (isLoading) {
+    return <Spinner />;
+  }
 
-    getAlbumData();
-  }, []);
+  if (isError) {
+    return <span>Error</span>;
+  }
 
   return (
     <div className="">
-      {albumPhotos.map((item) => (
+      {data.map((item) => (
         <Photo
           data={item}
           albumTitle={title}

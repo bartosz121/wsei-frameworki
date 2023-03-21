@@ -8,6 +8,7 @@ import AuthorBtn from "../AuthorBtn/AuthorBtn";
 import { trashIcon, commentIcon } from "../../icons";
 import { useAppDataStore } from "../../state/appData.state";
 import { useUserStore } from "../../state/user.state";
+import { useMutation } from "@tanstack/react-query";
 
 type Props = {
   data: IPost;
@@ -21,23 +22,21 @@ const Post = ({ data }: Props) => {
   const { addDeletedPost } = useAppDataStore();
   const navigate = useNavigate();
 
-  const deletePost = async () => {
+  const deletePostMutation = useMutation(async () => {
     const res = await axios.delete(
       `https://jsonplaceholder.typicode.com/posts/${id}`
     );
     addDeletedPost(id);
     setDeleted(true);
-    if (postId) {
-      navigate("/posts");
-    }
-  };
+    navigate("/posts");
+  });
 
   return (
     <>
       <div
         className={`rounded-xl border p-5 shadow-md w-full bg-white ${
-          deleted && "hidden"
-        }`}
+          deletePostMutation.isLoading ? "opacity-50" : ""
+        } ${deleted ? "hidden" : ""}`}
       >
         <div className="mt-4 mb-6">
           <div className="post-info">
@@ -48,7 +47,10 @@ const Post = ({ data }: Props) => {
               {title}
             </div>
             {loggedInUserId === userId && (
-              <ActionBtn icon={trashIcon} onClick={deletePost} />
+              <ActionBtn
+                icon={trashIcon}
+                onClick={() => deletePostMutation.mutate()}
+              />
             )}
           </div>
           <div className="post-body">{body}</div>

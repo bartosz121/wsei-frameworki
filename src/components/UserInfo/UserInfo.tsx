@@ -20,6 +20,7 @@ const UserInfo = ({ data }: Props) => {
     deletedComments,
   } = useAppDataStore();
   if (data.id === loggedInUserId) {
+    console.log(userData);
     data = userData!;
   }
 
@@ -82,24 +83,24 @@ const UserInfo = ({ data }: Props) => {
           </div>
           {Object.entries(data.address)
             .filter((item) => typeof item[1] === "string")
-            .map((item) => (
-              <div className="pt-2 pb-4">
+            .map((item, i) => (
+              <div className="pt-2 pb-4" key={`address-${i}`}>
                 <p className="user-info-item-head">{item[0]}</p>
                 <p className="user-info-item-data">{item[1]}</p>
               </div>
             ))}
           {Object.entries(data.address.geo)
             .filter((item) => typeof item[1] === "string")
-            .map((item) => (
-              <div className="pt-2 pb-4">
+            .map((item, i) => (
+              <div className="pt-2 pb-4" key={`geo-${i}`}>
                 <p className="user-info-item-head">{item[0]}</p>
                 <p className="user-info-item-data">{item[1]}</p>
               </div>
             ))}
           {Object.entries(data.company)
             .filter((item) => typeof item[1] === "string")
-            .map((item) => (
-              <div className="pt-2 pb-4">
+            .map((item, i) => (
+              <div className="pt-2 pb-4" key={`company-${i}`}>
                 <p className="user-info-item-head">{item[0]}</p>
                 <p className="user-info-item-data">{item[1]}</p>
               </div>

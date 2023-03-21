@@ -9,10 +9,9 @@ import Spinner from "../../components/Spinner/Spinner";
 import { IComment, IPost } from "../../types/Api";
 import TextForm from "../../components/TextForm/TextForm";
 import { useAppDataStore } from "../../state/appData.state";
+import { useQuery } from "@tanstack/react-query";
 
 const PostPage = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [postData, setPostData] = useState<IPost | null>(null);
   const { postId } = useParams();
   const { addedPosts, deletedPosts, addedComments, deletedComments } =
     useAppDataStore();
@@ -23,30 +22,33 @@ const PostPage = () => {
     (item) => item.postId === parseInt(postId!)
   );
 
+  const {
+    data: postData,
+    isLoading,
+    isError,
+  } = useQuery(["post", postId], async () => {
+    if (addedPostsIds.includes(parseInt(postId!))) {
+      return addedPosts.find((post) => post.id === parseInt(postId!));
+    } else {
+      const res = await axios.get<IPost>(
+        `https://jsonplaceholder.typicode.com/posts/${postId}`
+      );
+      return res.data;
+    }
+  });
+
   useEffect(() => {
-    const getPostData = async () => {
-      setIsLoading(true);
-
-      if (addedPostsIds.includes(parseInt(postId!))) {
-        setPostData(addedPosts.find((post) => post.id === parseInt(postId!))!);
-      } else {
-        const res = await axios.get<IPost>(
-          `https://jsonplaceholder.typicode.com/posts/${postId}`
-        );
-        setPostData(res.data);
-      }
-
-      setIsLoading(false);
-    };
-
     if (deletedPosts.includes(parseInt(postId!))) {
       navigate("/posts");
     }
-    getPostData();
   }, []);
 
   if (isLoading) {
     return <Spinner />;
+  }
+
+  if (isError) {
+    return <span>Error</span>;
   }
 
   return (
@@ -57,7 +59,7 @@ const PostPage = () => {
       <Feed<IComment>
         component={Comment}
         apiEndpoint={`comments?postId=${postData!.id}`}
-        addedArray={filteredAddedComments} // TODO filter this through postid
+        addedArray={filteredAddedComments}
         deletedArray={deletedComments}
       />
     </>

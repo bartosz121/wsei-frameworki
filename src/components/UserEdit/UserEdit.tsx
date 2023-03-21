@@ -4,6 +4,13 @@ import axios from "axios";
 import { useUserStore } from "../../state/user.state";
 
 import { IUser } from "../../types/Api";
+import { useMutation } from "@tanstack/react-query";
+
+type EditPayload = {
+  name: string;
+  username: string;
+  email: string;
+};
 
 type Props = {};
 
@@ -14,6 +21,13 @@ const UserEdit = (props: Props) => {
   const [email, setEmail] = useState(userData!.email);
   const navigate = useNavigate();
 
+  const editUserMutation = useMutation(async (payload: EditPayload) => {
+    const res = axios.patch<IUser>(
+      `https://jsonplaceholder.typicode.com/users/${userId}`
+    );
+    setUserData({ ...userData!, ...payload });
+  });
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
@@ -23,12 +37,7 @@ const UserEdit = (props: Props) => {
       email: email,
     };
 
-    const res = await axios.patch<IUser>(
-      `https://jsonplaceholder.typicode.com/users/${userId}`,
-      payload
-    );
-
-    setUserData(res.data);
+    editUserMutation.mutate(payload);
 
     navigate(`/user/${userId}`);
   };
