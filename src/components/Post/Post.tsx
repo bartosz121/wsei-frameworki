@@ -1,12 +1,14 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 import axios from "axios";
 
 import { IPost } from "../../types/Api";
 import ActionBtn from "../ActionBtn/ActionBtn";
 import AuthorBtn from "../AuthorBtn/AuthorBtn";
-import { AppContext } from "../../context/AppContext";
 import { trashIcon, commentIcon } from "../../icons";
+import { useAppDataStore } from "../../state/appData.state";
+import { useUserStore } from "../../state/user.state";
+import { useMutation } from "@tanstack/react-query";
 
 type Props = {
   data: IPost;
@@ -16,26 +18,25 @@ const Post = ({ data }: Props) => {
   const { id, userId, title, body } = data;
   const { postId } = useParams();
   const [deleted, setDeleted] = useState(false);
-  const { userId: loggedInUserId, deletedPosts } = useContext(AppContext);
+  const { userId: loggedInUserId } = useUserStore();
+  const { addDeletedPost } = useAppDataStore();
   const navigate = useNavigate();
 
-  const deletePost = async () => {
+  const deletePostMutation = useMutation(async () => {
     const res = await axios.delete(
       `https://jsonplaceholder.typicode.com/posts/${id}`
     );
-    deletedPosts.push(id);
+    addDeletedPost(id);
     setDeleted(true);
-    if (postId) {
-      navigate("/posts");
-    }
-  };
+    navigate("/posts");
+  });
 
   return (
     <>
       <div
         className={`rounded-xl border p-5 shadow-md w-full bg-white ${
-          deleted && "hidden"
-        }`}
+          deletePostMutation.isLoading ? "opacity-50" : ""
+        } ${deleted ? "hidden" : ""}`}
       >
         <div className="mt-4 mb-6">
           <div className="post-info">
@@ -46,7 +47,10 @@ const Post = ({ data }: Props) => {
               {title}
             </div>
             {loggedInUserId === userId && (
-              <ActionBtn icon={trashIcon} onClick={deletePost} />
+              <ActionBtn
+                icon={trashIcon}
+                onClick={() => deletePostMutation.mutate()}
+              />
             )}
           </div>
           <div className="post-body">{body}</div>

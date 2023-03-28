@@ -1,15 +1,13 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Navigate } from "react-router-dom";
-import { AppContext } from "../../context/AppContext";
+import { useUserStore } from "../../state/user.state";
 
 type Props = {
   children: React.ReactNode;
 };
 
 const ProtectedRoute = ({ children }: Props) => {
-  const { isLoggedIn } = useContext(AppContext);
-
-  console.log(isLoggedIn);
+  const { isLoggedIn } = useUserStore();
 
   if (!isLoggedIn) {
     return <Navigate to="/login" />;

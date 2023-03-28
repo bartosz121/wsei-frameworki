@@ -2,9 +2,11 @@ import React, { useContext, useState } from "react";
 
 import { IComment } from "../../types/Api";
 import ActionBtn from "../ActionBtn/ActionBtn";
-import { AppContext } from "../../context/AppContext";
 import { trashIcon } from "../../icons";
 import axios from "axios";
+import { useAppDataStore } from "../../state/appData.state";
+import { useUserStore } from "../../state/user.state";
+import { useMutation } from "@tanstack/react-query";
 
 type Props = {
   data: IComment;
@@ -13,21 +15,22 @@ type Props = {
 const Comment = ({ data }: Props) => {
   const { id, name, body, email } = data;
   const [deleted, setDeleted] = useState(false);
-  const { userData, deletedComments } = useContext(AppContext);
+  const { userData } = useUserStore();
+  const { addDeletedComment } = useAppDataStore();
 
-  const deleteComment = async () => {
+  const deleteCommentMutation = useMutation(async () => {
     const res = await axios.delete(
       `https://jsonplaceholder.typicode.com/comments/${id}`
     );
-    deletedComments.push(id);
+    addDeletedComment(id);
     setDeleted(true);
-  };
+  });
 
   return (
     <div
       className={`rounded-xl border p-5 shadow-md w-full bg-white ${
-        deleted && "hidden"
-      }`}
+        deleteCommentMutation.isLoading ? "opacity-50" : ""
+      } ${deleted ? "hidden" : ""}`}
     >
       <div className="mt-4 mb-6">
         <div className="flex flex-row justify-between">
@@ -38,7 +41,10 @@ const Comment = ({ data }: Props) => {
             {name}
           </div>
           {userData!.email === email && (
-            <ActionBtn icon={trashIcon} onClick={deleteComment} />
+            <ActionBtn
+              icon={trashIcon}
+              onClick={() => deleteCommentMutation.mutate()}
+            />
           )}
         </div>
         <div className="text-sm text-neutral-600">{body}</div>

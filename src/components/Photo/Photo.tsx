@@ -1,11 +1,13 @@
-import React, { useContext, useState } from "react";
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
 import axios from "axios";
 
 import { IPhoto } from "../../types/Api";
 import ActionBtn from "../ActionBtn/ActionBtn";
-import { AppContext } from "../../context/AppContext";
 import { albumIcon, trashIcon } from "../../icons";
+import { useUserStore } from "../../state/user.state";
+import { useAppDataStore } from "../../state/appData.state";
+import { useMutation } from "@tanstack/react-query";
 
 type Props = {
   data: IPhoto;
@@ -16,20 +18,25 @@ type Props = {
 const Photo = ({ data, albumTitle, showAlbumBtn = true }: Props) => {
   const { id, albumId, title, url, thumbnailUrl, album } = data;
   const [deleted, setDeleted] = useState(false);
-  const { userId: loggedInUserId, deletedPhotos } = useContext(AppContext);
+  const { userId: loggedInUserId } = useUserStore();
+  const { addDeletedPhoto } = useAppDataStore();
   const { albumId: albumIdParams } = useParams();
 
-  const deletePhoto = async () => {
+  const deletePhotoMutation = useMutation(async () => {
     const res = await axios.delete(
       `https://jsonplaceholder.typicode.com/photos/${id}`
     );
-    deletedPhotos.push(id);
+    addDeletedPhoto(id);
     setDeleted(true);
-  };
+  });
 
   return (
-    <div className={`my-2 photo ${deleted && "hidden"}`}>
-      <div className="rounded-lg shadow-lg bg-white max-w-sm">
+    <div
+      className={`my-2 photo ${
+        deletePhotoMutation.isLoading ? "opacity-50" : ""
+      } ${deleted ? "hidden" : ""}`}
+    >
+      <div className="rounded-lg h-full shadow-lg bg-white max-w-sm">
         <a href={url}>
           <img className="rounded-t-lg" src={url} />
         </a>
@@ -45,7 +52,10 @@ const Photo = ({ data, albumTitle, showAlbumBtn = true }: Props) => {
             </p>
             {album
               ? loggedInUserId === album.userId && (
-                  <ActionBtn icon={trashIcon} onClick={deletePhoto} />
+                  <ActionBtn
+                    icon={trashIcon}
+                    onClick={() => deletePhotoMutation.mutate()}
+                  />
                 )
               : null}
           </div>

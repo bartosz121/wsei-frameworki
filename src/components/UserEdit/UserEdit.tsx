@@ -1,18 +1,32 @@
-import React, { useState, useContext } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { useUserStore } from "../../state/user.state";
 
-import { AppContext } from "../../context/AppContext";
 import { IUser } from "../../types/Api";
+import { useMutation } from "@tanstack/react-query";
+
+type EditPayload = {
+  name: string;
+  username: string;
+  email: string;
+};
 
 type Props = {};
 
 const UserEdit = (props: Props) => {
-  const appContext = useContext(AppContext);
-  const [name, setName] = useState(appContext.userData!.name);
-  const [username, setUsername] = useState(appContext.userData!.username);
-  const [email, setEmail] = useState(appContext.userData!.email);
+  const { userData, userId, setUserData } = useUserStore();
+  const [name, setName] = useState(userData!.name);
+  const [username, setUsername] = useState(userData!.username);
+  const [email, setEmail] = useState(userData!.email);
   const navigate = useNavigate();
+
+  const editUserMutation = useMutation(async (payload: EditPayload) => {
+    const res = axios.patch<IUser>(
+      `https://jsonplaceholder.typicode.com/users/${userId}`
+    );
+    setUserData({ ...userData!, ...payload });
+  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -23,14 +37,9 @@ const UserEdit = (props: Props) => {
       email: email,
     };
 
-    const res = await axios.patch<IUser>(
-      `https://jsonplaceholder.typicode.com/users/${appContext.userId}`,
-      payload
-    );
+    editUserMutation.mutate(payload);
 
-    appContext.userData = res.data;
-
-    navigate(`/user/${appContext.userId}`);
+    navigate(`/user/${userId}`);
   };
 
   return (
